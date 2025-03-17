@@ -10,4 +10,5 @@ export type Article = {
   urlToImage?: string;
   publishedAt: string | Date | number;
   content?: string;
+  isOpen?: boolean;
 };
