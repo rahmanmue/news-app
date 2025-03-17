@@ -45,6 +45,7 @@ export default function useGetNews({
     };
 
     fetchNews();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, triggerFetch]);
 
   const newData = data.map(
