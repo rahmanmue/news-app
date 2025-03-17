@@ -1,3 +1,4 @@
+import { Article } from "@/types/Article";
 import { useEffect, useState } from "react";
 
 export default function useGetNews({
@@ -5,9 +6,10 @@ export default function useGetNews({
   sortBy = "publishedAt",
   category = "general",
   page = 0,
-  pageSize = 10,
+  pageSize = 20,
   triggerFetch = false,
 }) {
+  const dataHistory = JSON.parse(localStorage.getItem("newsHistory") as string);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>();
@@ -27,9 +29,11 @@ export default function useGetNews({
         }
 
         const result = await response.json();
+        console.log(result.articles);
 
         setData(result.articles || []);
       } catch (err) {
+        console.log(err);
         if (err instanceof Error) {
           setError(err.message);
         } else {
@@ -43,5 +47,30 @@ export default function useGetNews({
     fetchNews();
   }, [page, triggerFetch]);
 
-  return { data, loading, error };
+  const newData = data.map(
+    ({ title, author, description, url, urlToImage, publishedAt }) => {
+      if (dataHistory.some((el: Article) => el.title == title)) {
+        return {
+          title,
+          author,
+          description,
+          url,
+          urlToImage,
+          publishedAt,
+          isOpen: true,
+        };
+      }
+      return {
+        title,
+        author,
+        description,
+        url,
+        urlToImage,
+        publishedAt,
+        isOpen: false,
+      };
+    }
+  );
+
+  return { data: newData, loading, error };
 }

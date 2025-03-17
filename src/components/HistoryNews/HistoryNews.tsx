@@ -2,7 +2,7 @@ import useGetHistory from "@/hooks/useGetHistory";
 import CardHistory from "../CardHistory/CardHistory";
 
 const HistoryNews = () => {
-  const { dataHistory } = useGetHistory();
+  const { dataHistory, deleteNewsHistory } = useGetHistory();
 
   return (
     <>
@@ -12,7 +12,12 @@ const HistoryNews = () => {
         <div className="flex gap-2 flex-col">
           {dataHistory.length > 0 ? (
             dataHistory.map((article, index) => (
-              <CardHistory article={article} index={index} />
+              <CardHistory
+                article={article}
+                index={index}
+                key={index}
+                deleteHistory={deleteNewsHistory}
+              />
             ))
           ) : (
             <div className="text-lg font-semibold text-center mt-8">
