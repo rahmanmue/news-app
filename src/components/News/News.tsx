@@ -84,6 +84,7 @@ const News = () => {
                 {data.map((article, index) => (
                   <CardNews
                     article={article}
+                    key={index}
                     index={index}
                     newsClick={handleNewsClick}
                   />

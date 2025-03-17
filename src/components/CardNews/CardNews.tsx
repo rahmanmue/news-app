@@ -8,12 +8,16 @@ type CardNewsProps = {
 };
 
 const CardNews = ({ article, index, newsClick }: CardNewsProps) => {
+  const isLarge = (index: number) => (index + 1) % 10 == 1 || index % 10 == 7;
+
   return (
     <div
       key={index}
       onClick={() => newsClick(article)}
-      className={`rounded-lg flex flex-col gap-4
-               ${index == 0 || index == 7 ? "lg:col-span-2 lg:row-span-2" : ""}
+      className={`rounded-lg flex flex-col gap-4 p-2
+               ${isLarge(index) ? "lg:col-span-2 lg:row-span-2" : ""}
+               ${article.isOpen ? "bg-yellow-400" : ""}
+               ${index % 2 != 0 ? "bg-red-300" : ""}
           `}
     >
       <img
@@ -21,7 +25,7 @@ const CardNews = ({ article, index, newsClick }: CardNewsProps) => {
         alt={article.title}
         className={`
               w-full h-full object-cover rounded-lg cursor-pointer
-               ${index == 7 ? "lg:order-last" : ""}
+               ${index % 10 == 7 ? "lg:order-last" : ""}
               `}
       ></img>
 
@@ -33,7 +37,7 @@ const CardNews = ({ article, index, newsClick }: CardNewsProps) => {
         <p
           className={`text-black 
               ${
-                index == 0 || index == 7
+                isLarge(index)
                   ? "lg:text-md font-semibold"
                   : "lg:text-xs font-semibold"
               }
@@ -41,16 +45,13 @@ const CardNews = ({ article, index, newsClick }: CardNewsProps) => {
         >
           {article.author}.
         </p>
-        <h2
-          className={`w-full text-black lg:text-md font-bold
-              `}
-        >
+        <h2 className={`w-full text-black lg:text-md font-bold`}>
           {article.title}
         </h2>
         <p
           className={`text-black 
               ${
-                index == 0 || index == 7
+                isLarge(index)
                   ? "lg:text-md font-semibold"
                   : "lg:text-xs font-semibold"
               }

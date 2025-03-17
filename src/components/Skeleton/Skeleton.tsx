@@ -1,5 +1,7 @@
 const Skeleton = () => {
-  const column = Array.from({ length: 10 });
+  const column = Array.from({ length: 20 });
+
+  const isLarge = (index: number) => (index + 1) % 10 == 1 || index % 10 == 7;
 
   return (
     <>
@@ -7,14 +9,14 @@ const Skeleton = () => {
         <div
           key={index}
           className={`animate-pulse rounded-lg flex flex-col gap-4
-             ${index == 0 || index == 7 ? "lg:col-span-2 lg:row-span-2" : ""}
+             ${isLarge(index) ? "lg:col-span-2 lg:row-span-2" : ""}
         `}
         >
           <div
             className={`
-            w-full rounded bg-gray-500
-            ${index == 0 || index == 7 ? "h-full" : "h-48"}
-             ${index == 7 ? "lg:order-last" : ""}
+            w-full rounded bg-gray-500 text-8xl
+            ${isLarge(index) ? "h-full" : "h-48"}
+             ${index % 10 == 7 ? "lg:order-last" : ""}
             `}
           ></div>
 
@@ -22,13 +24,13 @@ const Skeleton = () => {
             <div
               className={`
             w-full bg-gray-400 rounded-lg
-            ${index == 0 || index == 7 ? "h-5" : "h-4"}
+            ${isLarge(index) ? "h-5" : "h-4"}
             `}
             ></div>
             <div
               className={`
              bg-gray-400 rounded-lg
-             ${index == 0 || index == 7 ? "w-2/3 h-5" : "w-1/2 h-4"}
+             ${isLarge(index) ? "w-2/3 h-5" : "w-1/2 h-4"}
             `}
             ></div>
           </div>
