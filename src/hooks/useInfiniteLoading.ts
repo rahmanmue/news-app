@@ -12,11 +12,11 @@ export function useInfiniteLoading(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (entries: any[]) => {
       const target = entries[0];
-      if (target.isIntersecting && data.length <= totalResults) {
+      if (target.isIntersecting && data.length < totalResults) {
         loadMore();
       }
     },
-    [data.length, loadMore, totalResults]
+    [loadMore]
   );
 
   useEffect(() => {

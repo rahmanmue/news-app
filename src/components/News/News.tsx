@@ -24,7 +24,7 @@ const News = () => {
 
   const loadMore = useCallback(() => {
     setPage((prev) => prev + 1);
-  }, []);
+  }, [setPage]);
 
   const { loader, isloadingInfinte } = useInfiniteLoading(
     loadMore,
