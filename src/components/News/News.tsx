@@ -1,25 +1,36 @@
 import useGetHistory from "@/hooks/useGetHistory";
 import useGetNews from "@/hooks/useGetNews";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Skeleton from "../Skeleton/Skeleton";
 import CardNews from "../CardNews/CardNews";
 import { Link } from "react-router-dom";
+import { useInfiniteLoading } from "@/hooks/useInfiniteLoading";
 
 const News = () => {
   const [query, setQuery] = useState("");
   const [sortBy, setSortBy] = useState("popularity");
   const [category, setCategory] = useState("general");
-  const [triggerFetch, setTriggerFetch] = useState(false);
+  const [isFetch, setIsFetch] = useState(false);
   const [page, setPage] = useState(1);
-  const { data, loading, error } = useGetNews({
+  const { data, totalResults, loading, error } = useGetNews({
     query,
     category,
     sortBy,
     page,
-    triggerFetch,
+    isFetch,
   });
 
   const { handleNewsClick } = useGetHistory();
+
+  const loadMore = useCallback(() => {
+    setPage((prev) => prev + 1);
+  }, []);
+
+  const { loader, isloadingInfinte } = useInfiniteLoading(
+    loadMore,
+    data,
+    totalResults
+  );
 
   return (
     <>
@@ -60,7 +71,7 @@ const News = () => {
           </select>
           <button
             type="button"
-            onClick={() => setTriggerFetch(!triggerFetch)}
+            onClick={() => setIsFetch(!isFetch)}
             className="block bg-black col-span-2 lg:col-span-1 text-white cursor-pointer font-semibold rounded w-full focus:outline-none focus:shadow-outline"
           >
             Search
@@ -103,7 +114,7 @@ const News = () => {
         )}
 
         {/* Pagination */}
-        <div className="flex gap-1 my-4 justify-end">
+        {/* <div className="flex gap-1 my-4 justify-end">
           <button
             disabled={page === 1}
             onClick={() => setPage(page - 1)}
@@ -119,6 +130,18 @@ const News = () => {
           >
             &gt;
           </button>
+        </div> */}
+
+        <div className="flex justify-center mt-4" ref={loader}>
+          {isloadingInfinte ? (
+            <span className="block p-2 bg-gray-300 text-black rounded-md">
+              Load More..
+            </span>
+          ) : (
+            <span className="block p-2 bg-blue-300 text-white rounded-md">
+              Data Completed!
+            </span>
+          )}
         </div>
       </div>
     </>

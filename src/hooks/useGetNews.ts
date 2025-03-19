@@ -7,12 +7,13 @@ export default function useGetNews({
   category = "general",
   page = 0,
   pageSize = 20,
-  triggerFetch = false,
+  isFetch = false,
 }) {
   const dataHistory = JSON.parse(localStorage.getItem("newsHistory") as string);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>();
+  const [totalResults, setTotalResults] = useState(0);
   const API_URL = import.meta.env.VITE_API_URL;
   const API_KEY = import.meta.env.VITE_API_KEY;
   const baseAPI = `${API_URL}/top-headlines?q=${query}&country=us&sortBy=${sortBy}&category=${category}&page=${page}&pageSize=${pageSize}&apiKey=${API_KEY}`;
@@ -29,7 +30,8 @@ export default function useGetNews({
         }
 
         const result = await response.json();
-        console.log(result.articles);
+        // console.log(result);
+        setTotalResults(result.totalResults);
 
         setData(result.articles || []);
       } catch (err) {
@@ -46,7 +48,7 @@ export default function useGetNews({
 
     fetchNews();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, triggerFetch]);
+  }, [page, isFetch]);
 
   const newData = data.map(
     ({ title, author, description, url, urlToImage, publishedAt }) => {
@@ -73,5 +75,5 @@ export default function useGetNews({
     }
   );
 
-  return { data: newData, loading, error };
+  return { data: newData, totalResults, loading, error };
 }
