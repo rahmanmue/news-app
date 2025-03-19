@@ -16,7 +16,7 @@ export function useInfiniteLoading(
         loadMore();
       }
     },
-    [loadMore]
+    [data.length, loadMore, totalResults]
   );
 
   useEffect(() => {
